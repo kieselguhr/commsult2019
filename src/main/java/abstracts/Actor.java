@@ -4,6 +4,7 @@ import interfaces.IActor;
 
 public abstract class Actor implements IActor {
 
-	public abstract void effectEnviroment();
+	public abstract int effectEnviroment(int value);
+	public abstract String prepareMessage();
 	
 }

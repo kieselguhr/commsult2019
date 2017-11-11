@@ -1,5 +1,5 @@
 package interfaces;
 
 public interface ISensor {
-	void effectEnvironment();
+	int effectEnvironment(int value);
 }
