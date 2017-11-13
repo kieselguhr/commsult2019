@@ -34,6 +34,7 @@ public class MainController implements Runnable {
 
     public void run(){
 
+
         GameTime gt = new GameTime(2300);
 
         mv.setSecurityLevel(timeVariable.determineSecurityLevel(gt.getTime()));
@@ -49,8 +50,6 @@ public class MainController implements Runnable {
 
         wallDurability = new EnvironmentVariable(100, "Wall Durability","%" ,walls, outsideWindSpeed);
 
-        int i = 0;
-
         while(true){
 
             try {
@@ -65,6 +64,28 @@ public class MainController implements Runnable {
 
             mv.setSecurityLabel(timeVariable.isSafe(gt.getTime()));
 
+            if(autopilot){
+                /**TEMPERATURE*/
+                if(insideTemperature.getValue() < 16){
+                    ac.setTemperature(ac.getTemperature()+1);
+                    mv.setAC(ac.getTemperature());
+                }
+                if(insideTemperature.getValue() > 24){
+                    ac.setTemperature(ac.getTemperature()-1);
+                    mv.setAC(ac.getTemperature());
+                }
+
+                /**Wall*/
+                if(wallDurability.getValue()<100){
+//                    mv.setWall(((WindActor)wallDurability.getActor()).getWallType() + 1);
+//                    setWallDurability(((WindActor)wallDurability.getActor()).getWallType() + 1);
+                }
+
+                /**Safety*/
+                mv.setSecurityLevel(timeVariable.determineSecurityLevel(gt.getTime()));
+
+            }
+
             System.out.println(gt.prepareString());
             System.out.println(makePrint(insideTemperature) + "\t" + makePrint(outsideTemperature) +"\t" +ac.prepareMessage());
             System.out.println(makePrint(wallDurability) + "\t"+ makePrint(outsideWindSpeed)+"\t"+walls.prepareMessage());
@@ -72,7 +93,7 @@ public class MainController implements Runnable {
             insideTemperature.affectValue();
             wallDurability.affectValue();
             gt.progress();
-            i++;
+
         }
 
     }

@@ -48,6 +48,8 @@ public class MainViewer {
     static JRadioButton openButton = new JRadioButton(openString);
     static JRadioButton halfButton = new JRadioButton(halfString);
     static JRadioButton closeButton = new JRadioButton(closeString);
+    static final JSlider ACslider = new JSlider(JSlider.HORIZONTAL, itemp_MIN, itemp_MAX, itemp_INIT);
+
 
     public static void setMc(MainController mc) {
         MainViewer.mc = mc;
@@ -58,6 +60,12 @@ public class MainViewer {
     static final JLabel timeLabel = new JLabel();
     static final JLabel ITemp = new JLabel();
     static final JLabel secLabel = new JLabel();
+
+
+
+    static JRadioButton strawButton = new JRadioButton(strawString);
+    static JRadioButton stickButton = new JRadioButton(stickString);
+    static JRadioButton brickButton = new JRadioButton(brickString);
 
     public static void createAndShowGUI(){
         //Create and set up the window.
@@ -166,7 +174,7 @@ public class MainViewer {
         OTslider.setPaintLabels(true);
         pane.add(OTslider, c);
 
-        final JSlider ACslider = new JSlider(JSlider.HORIZONTAL, itemp_MIN, itemp_MAX, itemp_INIT);
+
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 3;
         c.weightx = 1;
@@ -215,11 +223,20 @@ public class MainViewer {
 
 
 
-        JRadioButton strawButton = new JRadioButton(strawString);
+
         strawButton.setMnemonic(KeyEvent.VK_B);
         strawButton.setActionCommand(String.valueOf(WindActor.WALLTYPE_STRAW));
         strawButton.setSelected(true);
+        stickButton.setMnemonic(KeyEvent.VK_C);
+        stickButton.setActionCommand(String.valueOf(WindActor.WALLTYPE_STICK));
 
+        brickButton.setMnemonic(KeyEvent.VK_D);
+        brickButton.setActionCommand(String.valueOf(WindActor.WALLTYPE_BRICK));
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(strawButton);
+        group.add(stickButton);
+        group.add(brickButton);
 
         class StrawListener implements ActionListener{
             public void actionPerformed(ActionEvent event){
@@ -238,19 +255,6 @@ public class MainViewer {
                 mc.setWallDurability(WindActor.WALLTYPE_BRICK);
             }
         }
-
-        JRadioButton stickButton = new JRadioButton(stickString);
-        stickButton.setMnemonic(KeyEvent.VK_C);
-        stickButton.setActionCommand(String.valueOf(WindActor.WALLTYPE_STICK));
-
-        JRadioButton brickButton = new JRadioButton(brickString);
-        brickButton.setMnemonic(KeyEvent.VK_D);
-        brickButton.setActionCommand(String.valueOf(WindActor.WALLTYPE_BRICK));
-
-        ButtonGroup group = new ButtonGroup();
-        group.add(strawButton);
-        group.add(stickButton);
-        group.add(brickButton);
 
         strawButton.addActionListener(new StrawListener());
         stickButton.addActionListener(new StickListener());
@@ -480,6 +484,19 @@ public class MainViewer {
     }
     String item[] = {"Handphone", "Laptop", "Dog", "Grandmother", "Purse", "Money", "Girlfriend"};
 
+    public void setWall(int wallType){
+        switch (wallType){
+            case WindActor.WALLTYPE_STRAW:
+                strawButton.setSelected(true);
+                break;
+            case WindActor.WALLTYPE_STICK:
+                stickButton.setSelected(true);
+                break;
+            case WindActor.WALLTYPE_BRICK:
+                brickButton.setSelected(true);
+                break;
+        }
+    }
 
     public void setSecurityLabel(boolean safe) {
 
@@ -498,4 +515,9 @@ public class MainViewer {
         }
 
     }
+
+    public void setAC(int temperature){
+        ACslider.setValue(temperature);
+    }
+
 }
