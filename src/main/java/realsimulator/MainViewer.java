@@ -8,7 +8,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
+import java.awt.event.KeyEvent;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
@@ -30,6 +30,16 @@ public class MainViewer {
 
     static final int itemp_MIN = 15;
     static final int itemp_MAX = 30;
+    static final int itemp_INIT = 22;
+
+    static String strawString = "Straw";
+    static String stickString = "Stick";
+    static String brickString = "Brick";
+
+    static String openString = "open";
+    static String halfString = "half";
+    static String closeString = "close";
+
     static final int itemp_INIT = TemperatureActor.STARTING_TEMPERATURE;
 
     public static void setMc(MainController mc) {
@@ -41,7 +51,6 @@ public class MainViewer {
     public static void createAndShowGUI(){
         //Create and set up the window.
         JFrame frame = new JFrame("REMOTE");
-
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Set up the content pane.
@@ -81,8 +90,27 @@ public class MainViewer {
         c.gridy = 0;
         AClabel.setFont(new Font("Arial", Font.PLAIN, 14));
         pane.add(AClabel,c);
+        AClabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        pane.add(AClabel,c);
+
+        JLabel ITlabel =new JLabel("Inside Temperature (°C)");
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 2;
+        c.weightx = 1;
+        c.gridy = 0;
+        ITlabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        pane.add(ITlabel,c);
 
         final JSlider OTslider = new JSlider(JSlider.HORIZONTAL, temp_MIN, temp_MAX, temp_INIT);
+        JLabel ITemp =new JLabel();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 2;
+        c.weightx = 1;
+        c.gridy = 1;
+        ITemp.setFont(new Font("Arial", Font.PLAIN, 14));
+        pane.add(ITemp,c);
+
+        JSlider OTslider = new JSlider(JSlider.HORIZONTAL, temp_MIN, temp_MAX, temp_INIT);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.weightx = 1;
@@ -137,26 +165,36 @@ public class MainViewer {
         WSslider.setLabelTable(position1);
         pane.add(WSslider, c);
 
-//        JButton straw = new JButton("Straw");
-//        c.fill = GridBagConstraints.HORIZONTAL;
-//        c.weightx = 1;
-//        c.gridx = 1;
-//        c.gridy = 3;
-//        pane.add(straw, c);
-//
-//        JButton wood = new JButton("Wood");
-//        c.fill = GridBagConstraints.HORIZONTAL;
-//        c.weightx = 1;
-//        c.gridx = 1;
-//        c.gridy = 4;
-//        pane.add(wood, c);
-//
-//        JButton brick = new JButton("Brick");
-//        c.fill = GridBagConstraints.HORIZONTAL;
-//        c.weightx = 1;
-//        c.gridx = 1;
-//        c.gridy = 5;
-//        pane.add(brick, c);
+
+        JRadioButton strawButton = new JRadioButton(strawString);
+        strawButton.setMnemonic(KeyEvent.VK_B);
+        strawButton.setActionCommand(strawString);
+        strawButton.setSelected(true);
+
+        JRadioButton stickButton = new JRadioButton(stickString);
+        stickButton.setMnemonic(KeyEvent.VK_C);
+        stickButton.setActionCommand(stickString);
+
+        JRadioButton brickButton = new JRadioButton(brickString);
+        brickButton.setMnemonic(KeyEvent.VK_D);
+        brickButton.setActionCommand(brickString);
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(strawButton);
+        group.add(stickButton);
+        group.add(brickButton);
+
+        c.gridx = 1;
+        c.gridy = 3;
+
+        pane.add(strawButton, c);
+        c.gridx = 2;
+        c.gridy = 3;
+        pane.add(stickButton, c);
+        c.gridx = 3;
+        c.gridy = 3;
+        pane.add(brickButton, c);
+
 
 //        Date date = new Date();
 //        SpinnerDateModel sm = new SpinnerDateModel(date, null, null, Calendar.MINUTE);
@@ -182,6 +220,13 @@ public class MainViewer {
         c.gridy = 5;
         pane.add(SP, c);
 
+        JLabel Blabel =new JLabel("Blind Configuration");
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.weightx = 1;
+        c.gridy = 4;
+        Blabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        pane.add(Blabel,c);
 
         class OTSliderChange implements ChangeListener {
             public void stateChanged(ChangeEvent e) {
@@ -193,6 +238,35 @@ public class MainViewer {
                 }
             }
         }
+        JRadioButton openButton = new JRadioButton(openString);
+        strawButton.setMnemonic(KeyEvent.VK_B);
+        strawButton.setActionCommand(openString);
+        strawButton.setSelected(true);
+
+        JRadioButton halfButton = new JRadioButton(halfString);
+        stickButton.setMnemonic(KeyEvent.VK_C);
+        stickButton.setActionCommand(halfString);
+
+        JRadioButton closeButton = new JRadioButton(closeString);
+        brickButton.setMnemonic(KeyEvent.VK_D);
+        brickButton.setActionCommand(closeString);
+
+        ButtonGroup group1 = new ButtonGroup();
+        group1.add(openButton);
+        group1.add(halfButton);
+        group1.add(closeButton);
+
+        c.gridx = 1;
+        c.gridy = 5;
+
+        pane.add(openButton, c);
+        c.gridx = 2;
+        c.gridy = 5;
+        pane.add(halfButton, c);
+        c.gridx = 3;
+        c.gridy = 5;
+        pane.add(closeButton, c);
+
 
 
         class ACSliderChange implements ChangeListener {
@@ -227,6 +301,14 @@ public class MainViewer {
 //                Object timetemp = timeSpinner.getValue();
 //                SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 //                String time = format.format(date);
+
+                String time = timeEditor.getFormat().format(timeSpinner.getValue());
+
+
+                System.out.println(temp);
+                System.out.println(wind);
+                System.out.println(time);
+
 
             }
         }
