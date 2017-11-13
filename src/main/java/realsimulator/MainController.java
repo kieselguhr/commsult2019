@@ -20,10 +20,24 @@ public class MainController implements Runnable {
 
     EnvironmentVariable insideTemperature;
     EnvironmentVariable wallDurability;
+    TimeVariable timeVariable = new TimeVariable();
+
+    boolean autopilot;
+
+    public boolean isAutopilot() {
+        return autopilot;
+    }
+
+    public void setAutopilot(boolean autopilot) {
+        this.autopilot = autopilot;
+    }
 
     public void run(){
 
         GameTime gt = new GameTime(2300);
+
+        mv.setSecurityLevel(timeVariable.determineSecurityLevel(gt.getTime()));
+        timeVariable.setCurrentState(timeVariable.determineSecurityLevel(gt.getTime()));
 
         TemperatureActor ac = new TemperatureActor();
         TemperatureSensor outsideTemperature = new TemperatureSensor(STARTING_TEMPERATURE);
@@ -38,18 +52,22 @@ public class MainController implements Runnable {
         int i = 0;
 
         while(true){
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
 //            gt.printTime();
-            System.out.println(gt.prepareString());
             mv.setTime(gt.prepareString());
+            mv.setInsideTemperature(insideTemperature.getValue()+"");
+            mv.setDurabilityValue(wallDurability.getValue());
+
+            mv.setSecurityLabel(timeVariable.isSafe(gt.getTime()));
+
+            System.out.println(gt.prepareString());
             System.out.println(makePrint(insideTemperature) + "\t" + makePrint(outsideTemperature) +"\t" +ac.prepareMessage());
             System.out.println(makePrint(wallDurability) + "\t"+ makePrint(outsideWindSpeed)+"\t"+walls.prepareMessage());
-            System.out.println();
 
             insideTemperature.affectValue();
             wallDurability.affectValue();
@@ -77,5 +95,13 @@ public class MainController implements Runnable {
 
     public void setOutsideWindSpeed(int fps){
         wallDurability.getSensor().setValue(fps);
+    }
+
+    public void setWallDurability(int fps){
+        ((WindActor) wallDurability.getActor()).setWallType(fps);
+    }
+
+    public void setWindow(int fps){
+        timeVariable.setCurrentState(fps);
     }
 }
