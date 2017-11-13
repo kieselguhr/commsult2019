@@ -1,14 +1,13 @@
 package realsimulator;
 
 import javax.swing.*;
-import javax.swing.text.DateFormatter;
-import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
 
@@ -24,6 +23,10 @@ public class MainViewer {
     static final int temp_MIN = -10;
     static final int temp_MAX = 40;
     static final int temp_INIT = 25;
+
+    static final int itemp_MIN = 15;
+    static final int itemp_MAX = 30;
+    static final int itemp_INIT = 22;
     
     public static void createAndShowGUI(){
         //Create and set up the window.
@@ -59,15 +62,33 @@ public class MainViewer {
         OTlabel.setFont(new Font("Arial", Font.PLAIN, 14));
         pane.add(OTlabel,c);
 
-        JSlider slider = new JSlider(JSlider.HORIZONTAL, temp_MIN, temp_MAX, temp_INIT);
+        JLabel ITlabel =new JLabel("Inside Temperature (°C)");
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.weightx = 1;
+        c.gridy = 0;
+        ITlabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        pane.add(ITlabel,c);
+
+        JSlider OTslider = new JSlider(JSlider.HORIZONTAL, temp_MIN, temp_MAX, temp_INIT);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.weightx = 1;
         c.gridy = 1;
-        slider.setMajorTickSpacing(10);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-        pane.add(slider, c);
+        OTslider.setMajorTickSpacing(10);
+        OTslider.setPaintTicks(true);
+        OTslider.setPaintLabels(true);
+        pane.add(OTslider, c);
+
+        JSlider ITslider = new JSlider(JSlider.HORIZONTAL, itemp_MIN, itemp_MAX, itemp_INIT);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.weightx = 1;
+        c.gridy = 1;
+        ITslider.setMajorTickSpacing(3);
+        ITslider.setPaintTicks(true);
+        ITslider.setPaintLabels(true);
+        pane.add(ITslider, c);
 
         JLabel WSlabel =new JLabel("Wind Speed (KM/H)");
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -77,14 +98,22 @@ public class MainViewer {
         WSlabel.setFont(new Font("Arial", Font.PLAIN, 14));
         pane.add(WSlabel,c);
 
-        JSlider slider1 = new JSlider();
+        JLabel Wlabel =new JLabel("Wall Type");
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.weightx = 1;
+        c.gridy = 2;
+        Wlabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        pane.add(Wlabel,c);
+
+        JSlider WSslider = new JSlider();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.weightx = 1;
         c.gridy = 3;
-        slider1.setMajorTickSpacing(20);
-        slider1.setPaintTicks(true);
-        slider1.setPaintLabels(true);
+        WSslider.setMajorTickSpacing(20);
+        WSslider.setPaintTicks(true);
+        WSslider.setPaintLabels(true);
         Hashtable position1 = new Hashtable();
         position1.put(0, new JLabel("0"));
         position1.put(20, new JLabel("20"));
@@ -92,20 +121,36 @@ public class MainViewer {
         position1.put(60, new JLabel("60"));
         position1.put(80, new JLabel("80"));
         position1.put(100, new JLabel("100"));
-        slider1.setLabelTable(position1);
-        pane.add(slider1, c);
+        WSslider.setLabelTable(position1);
+        pane.add(WSslider, c);
 
-//        JFormattedTextField timeInput = new JFormattedTextField();
-//        timeInput.setFormatterFactory(new DefaultFormatterFactory(new DateFormatter(DateFormat.getTimeInstance())));
+//        JButton straw = new JButton("Straw");
 //        c.fill = GridBagConstraints.HORIZONTAL;
-//        c.gridx = 0;
 //        c.weightx = 1;
+//        c.gridx = 1;
+//        c.gridy = 3;
+//        pane.add(straw, c);
+//
+//        JButton wood = new JButton("Wood");
+//        c.fill = GridBagConstraints.HORIZONTAL;
+//        c.weightx = 1;
+//        c.gridx = 1;
 //        c.gridy = 4;
-//        pane.add(timeInput, c);
+//        pane.add(wood, c);
+//
+//        JButton brick = new JButton("Brick");
+//        c.fill = GridBagConstraints.HORIZONTAL;
+//        c.weightx = 1;
+//        c.gridx = 1;
+//        c.gridy = 5;
+//        pane.add(brick, c);
 
         Date date = new Date();
-        JSpinner timeSpinner = new JSpinner( new SpinnerDateModel() );
+        SpinnerDateModel sm = new SpinnerDateModel(date, null, null, Calendar.MINUTE);
+
+        JSpinner timeSpinner = new JSpinner(sm);
         JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "HH:mm");
+        timeEditor.getTextField().setEditable( false );
         timeSpinner.setEditor(timeEditor);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1;
@@ -122,13 +167,26 @@ public class MainViewer {
         pane.add(SP, c);
 
 
+        class sliderChange implements ChangeListener {
+            public void stateChanged(ChangeEvent e) {
+                JSlider source = (JSlider)e.getSource();
+                if (!source.getValueIsAdjusting()) {
+                    int fps = (int)source.getValue();
+                    System.out.println(fps);
+                }
+            }
+        }
+
+
         class calculateListener1 implements ActionListener{
             public void actionPerformed(ActionEvent event){
-                int temp = slider.getValue();
-                int wind = slider1.getValue();
-                Object timetemp = timeSpinner.getValue();
-                SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-                String time = format.format(date);
+                int temp = OTslider.getValue();
+                int wind = WSslider.getValue();
+//                Object timetemp = timeSpinner.getValue();
+//                SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+//                String time = format.format(date);
+
+                String time = timeEditor.getFormat().format(timeSpinner.getValue());
 
 
                 System.out.println(temp);
