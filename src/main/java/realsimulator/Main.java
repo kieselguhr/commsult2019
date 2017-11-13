@@ -2,11 +2,12 @@ package realsimulator;
 
 public class Main {
 	public static void main(String args[]) {
+		MainViewer mv = new MainViewer();
 
-		System.out.println("start");
-		MainController mainController = new MainController();
-
-		mainController.run();
-
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				mv.createAndShowGUI();
+			}
+		});
 	}
 }
