@@ -1,5 +1,5 @@
 package interfaces;
 
 public interface IActor {
-	public int effectEnviroment(int value);
+	public int effectEnvironment(int value);
 }

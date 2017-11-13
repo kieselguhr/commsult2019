@@ -8,7 +8,7 @@ public class TemperatureSensor extends Sensor{
         super("Outside Temperature", "celcius", value);
     }
 
-    public int effectEnviroment(int value) {
+    public int effectEnvironment(int value) {
         return (value + this.getValue())/2;
     }
 
@@ -24,7 +24,4 @@ public class TemperatureSensor extends Sensor{
 
     }
 
-    public int effectEnvironment(int value) {
-        return 0;
-    }
 }

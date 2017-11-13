@@ -4,7 +4,7 @@ import interfaces.ISensor;
 
 public abstract class Sensor implements ISensor{
 
-	public abstract int effectEnviroment(int value);
+	public abstract int effectEnvironment(int value);
 
 	String TAG;
 	String unit;

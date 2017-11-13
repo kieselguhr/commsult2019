@@ -21,8 +21,8 @@ public class EnvironmentVariable {
 	}
 
 	public void affectValue(){
-		this.value = sensor.effectEnviroment(value);
-		this.value = actor.effectEnviroment(value);
+		this.value = sensor.effectEnvironment(value);
+		this.value = actor.effectEnvironment(value);
 	}
 
 	public Actor getActor() {

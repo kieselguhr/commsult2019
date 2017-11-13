@@ -6,7 +6,7 @@ public class TemperatureActor extends Actor {
 
     int temperature = 18;
 
-    public int effectEnviroment(int value) {
+    public int effectEnvironment(int value) {
         return (value + temperature) / 2;
     }
 
