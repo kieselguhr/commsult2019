@@ -4,7 +4,9 @@ import abstracts.Actor;
 
 public class TemperatureActor extends Actor {
 
-    int temperature = 18;
+    public static final int STARTING_TEMPERATURE = 18;
+
+    int temperature = STARTING_TEMPERATURE;
 
     public int effectEnvironment(int value) {
         return (value + temperature) / 2;

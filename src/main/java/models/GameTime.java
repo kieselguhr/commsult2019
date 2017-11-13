@@ -2,6 +2,7 @@ package models;
 
 public class GameTime {
 
+    int day = 1;
     int time = 1000;
 
     public GameTime(int time) {
@@ -19,10 +20,21 @@ public class GameTime {
             time++;
             time = time * 100;
         }
+
+        if(time >= 2400){
+            time = 0;
+            day++;
+        }
+
     }
 
-    public void printTime(){
+//    public void printTime(){
+//
+//        String printValue = prepareString();
+//        System.out.println(printValue);
+//    }
 
+    public String prepareString() {
         String h = "";
         String m = "";
 
@@ -35,8 +47,7 @@ public class GameTime {
             m = String.valueOf(time % 100);
         }
 
-
-        System.out.println("Time \t" + h+":"+m);
+        return "Day "+ day+  " " + h+":"+m;
     }
 
 }
