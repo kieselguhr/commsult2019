@@ -76,10 +76,13 @@ public class MainController implements Runnable {
                 }
 
                 /**Wall*/
-                if(wallDurability.getValue()<100){
-//                    mv.setWall(((WindActor)wallDurability.getActor()).getWallType() + 1);
-//                    setWallDurability(((WindActor)wallDurability.getActor()).getWallType() + 1);
+                if(((WindActor)wallDurability.getActor()).getWallDurability()<outsideWindSpeed.getValue()){
+                    if(!(((WindActor)wallDurability.getActor()).getWallType()==WindActor.WALLTYPE_BRICK)){
+                        mv.setWall(((WindActor)wallDurability.getActor()).getWallType() + 1);
+                        setWallDurability(((WindActor)wallDurability.getActor()).getWallType() + 1);
+                    }
                 }
+
 
                 /**Safety*/
                 mv.setSecurityLevel(timeVariable.determineSecurityLevel(gt.getTime()));
